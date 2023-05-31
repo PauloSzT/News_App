@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.newsapplication.ui.detail.DetailScreen
 import com.example.newsapplication.ui.favorites.FavoritesScreen
 import com.example.newsapplication.ui.search.SearchScreen
+import com.example.newsapplication.ui.search.SearchViewModel
 
 @Composable
 fun NavigationGraph(
@@ -42,7 +43,7 @@ fun NavigationGraph(
             FavoritesScreen()
         }
         composable(route = NavItem.Search.route) {
-            SearchScreen()
+            SearchScreen(viewModel = SearchViewModel(localContext))
         }
     }
 }
