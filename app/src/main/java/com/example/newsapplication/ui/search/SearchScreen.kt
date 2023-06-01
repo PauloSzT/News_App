@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,20 +29,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.newsapplication.R
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = koinViewModel()
 ) {
-    SearchScreenContent()
+    SearchScreenContent(viewModel.searchUiState)
 }
 
 @Composable
 fun SearchScreenContent(
+    searchUiState: SearchUiState
 ) {
+    val searchResultList by searchUiState.searchResultList.collectAsState()
+    val isLoading by searchUiState.isLoading.collectAsState()
+    val searchValue by searchUiState.searchValue.collectAsState()
 
     Column(
         modifier = Modifier
@@ -92,15 +95,9 @@ fun SearchScreenContent(
         Row {
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = "",
-                onValueChange = {
-//                        value ->
-//                    searchUiState.onSearchQueryChange(value)
-//                    coroutineScope.launch {
-//                        if (scaffoldState.bottomSheetState.isVisible) {
-//                            scaffoldState.bottomSheetState.hide()
-//                        }
-//                    }
+                value = searchValue,
+                onValueChange = { value ->
+                    searchUiState.onQueryChange(value)
                 },
                 trailingIcon = {
                     Icon(
@@ -117,10 +114,28 @@ fun SearchScreenContent(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            LoadingScreen()
-            LazyColumn(
-                modifier = Modifier.fillMaxSize()
-            ) {}
+            if (isLoading) {
+                LoadingScreen()
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    if (searchResultList.isEmpty()) {
+                        item { NoResult() }
+                    } else {
+                        searchResultList.forEach { searchResult ->
+                            item {
+                                SearchItemRow(
+                                    searchResult
+                                )
+                            }
+                            item {
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
