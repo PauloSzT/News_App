@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -80,4 +81,27 @@ dependencies {
 
     // Kotlin serialization
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+
+    //Koin
+    implementation("io.insert-koin:koin-core:3.4.1")
+    implementation ("io.insert-koin:koin-android:3.4.1")
+    implementation ("io.insert-koin:koin-android-compat:3.4.1")
+    implementation ("io.insert-koin:koin-androidx-workmanager:3.4.1")
+    implementation ("io.insert-koin:koin-androidx-navigation:3.4.1")
+    implementation ("io.insert-koin:koin-androidx-compose:3.4.5")
+
+    // Koin for Ktor
+    implementation ("io.insert-koin:koin-ktor:3.4.1")
+    // SLF4J Logger
+    implementation ("io.insert-koin:koin-logger-slf4j:3.4.1")
+
+
+    // Ktor
+    implementation("io.ktor:ktor-client-core:2.3.0")
+    implementation("io.ktor:ktor-client-cio:2.3.0")
+    implementation("io.ktor:ktor-client-android:2.3.0")
+    implementation("io.ktor:ktor-client-logging:2.3.0")
+    implementation("io.ktor:ktor-client-serialization:2.3.0")
+
+    implementation("ch.qos.logback:logback-classic:1.2.3")
 }

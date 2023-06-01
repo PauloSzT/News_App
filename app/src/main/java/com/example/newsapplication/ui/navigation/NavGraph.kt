@@ -30,7 +30,6 @@ fun NavigationGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
-    val localContext = LocalContext.current
     NavHost(
         navController = navController,
         startDestination = NavItem.Search.route,
@@ -43,7 +42,7 @@ fun NavigationGraph(
             FavoritesScreen()
         }
         composable(route = NavItem.Search.route) {
-            SearchScreen(viewModel = SearchViewModel(localContext))
+            SearchScreen()
         }
     }
 }

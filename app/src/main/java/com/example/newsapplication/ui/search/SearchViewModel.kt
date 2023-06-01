@@ -1,9 +1,10 @@
 package com.example.newsapplication.ui.search
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.newsapplication.data.remote.repository.RemoteRepository
 
-class SearchViewModel (context: Context) : ViewModel(){
+class SearchViewModel (
+    remoteRepository: RemoteRepository
+) : ViewModel(){
 
 }

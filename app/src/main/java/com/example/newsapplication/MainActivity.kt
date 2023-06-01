@@ -31,15 +31,20 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.ui.theme.NewsAppTheme
+import com.example.newsapplication.di.applicationModule
 import com.example.newsapplication.ui.navigation.BottomNav
 import com.example.newsapplication.ui.navigation.NavItem
 import com.example.newsapplication.ui.navigation.NavItem.Companion.title
 import com.example.newsapplication.ui.navigation.NavigationGraph
+import org.koin.core.context.startKoin
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        startKoin { modules(applicationModule) }
+
         setContent {
             val viewModel = MainActivityViewModel(LocalContext.current)
             val navHostController = rememberNavController()
