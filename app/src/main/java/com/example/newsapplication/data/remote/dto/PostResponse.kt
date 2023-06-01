@@ -38,15 +38,16 @@ data class News(
     val isHosted: Boolean,
     val pillarId: String,
     val pillarName: String
-): ToUiMapper<UiNews>{
-    override fun mapToUiNews(): UiNews {
+) : ToUiMapper<UiNews> {
+    override fun mapToUiNews(ids: List<String>): UiNews {
         return UiNews(
             id = id,
             type = type,
             sectionName = sectionName,
             webPublicationDate = webPublicationDate,
             webTitle = webTitle,
-            webUrl = webUrl
+            webUrl = webUrl,
+            isFavorite = ids.contains(id)
         )
     }
 }

@@ -95,7 +95,6 @@ dependencies {
     // SLF4J Logger
     implementation ("io.insert-koin:koin-logger-slf4j:3.4.1")
 
-
     // Ktor
     implementation("io.ktor:ktor-client-core:2.3.0")
     implementation("io.ktor:ktor-client-cio:2.3.0")
@@ -106,4 +105,16 @@ dependencies {
     implementation ("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
 
     implementation("ch.qos.logback:logback-classic:1.2.3")
+
+    //DataStore
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    // optional - RxJava2 support
+    implementation ("androidx.datastore:datastore-preferences-rxjava2:1.0.0")
+    // optional - RxJava3 support
+    implementation ("androidx.datastore:datastore-preferences-rxjava3:1.0.0")
+
+    // Room
+    implementation ("androidx.room:room-runtime:2.5.1")
+    implementation ("androidx.room:room-ktx:2.5.1")
+    ksp ("androidx.room:room-compiler:2.5.1")
 }

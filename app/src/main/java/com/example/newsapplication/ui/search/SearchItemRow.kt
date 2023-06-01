@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.newsapplication.ui.models.UiNews
 
@@ -39,8 +41,18 @@ fun SearchItemRow(
                     softWrap = true
                 )
                 Text(
-                    text = uiNews.webPublicationDate
+                    text = "Publication Date : ${uiNews.webPublicationDate}"
                 )
+//                Icon(
+//                    modifier = Modifier
+//                        .padding(top = 16.dp, end = 8.dp)
+//                        .weight(0.5f)
+//                        .clickable { },
+//                    painter = painterResource(
+//                        if (uiNews.isFavorite) R.drawable.ic_start_fill else R.drawable.ic_start_empty
+//                    ),
+//                    contentDescription = null
+//                )
             }
         }
     }
