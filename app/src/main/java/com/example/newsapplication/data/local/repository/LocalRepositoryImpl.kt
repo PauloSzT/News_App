@@ -25,6 +25,8 @@ class LocalRepositoryImpl(
 
     override fun getAllIds(): Flow<List<String>> = appDataBaseImpl.getAllIds()
 
+    override fun getItemById(id: String): Flow<FavoriteItem> = appDataBaseImpl.getItemById(id)
+
     override suspend fun deleteAllItems() = appDataBaseImpl.deleteAllItems()
 
     override suspend fun insertItem(item: FavoriteItem) = appDataBaseImpl.insertItem(item)

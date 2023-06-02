@@ -7,42 +7,49 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.NavigationDrawerItemColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.newsapplication.core.CoreConstants.EMPTY_STRING
 import com.example.newsapplication.ui.detail.DetailScreen
 import com.example.newsapplication.ui.favorites.FavoritesScreen
+import com.example.newsapplication.ui.navigation.NavConstants.DETAIL_ARGUMENT_KEY
 import com.example.newsapplication.ui.search.SearchScreen
-import com.example.newsapplication.ui.search.SearchViewModel
+import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun NavigationGraph(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navHostController: NavHostController = rememberNavController()
 ) {
     NavHost(
-        navController = navController,
+        navController = navHostController,
         startDestination = NavItem.Search.route,
         modifier = modifier.fillMaxSize()
     ) {
-        composable(route = NavItem.Detail.route) {
-            DetailScreen()
+        composable(
+            route = NavItem.Detail.route,
+            arguments = listOf(navArgument(DETAIL_ARGUMENT_KEY) { type = NavType.StringType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getString(DETAIL_ARGUMENT_KEY) ?: EMPTY_STRING
+            DetailScreen(getViewModel(parameters = { parametersOf(id) }))
         }
         composable(route = NavItem.Favorites.route) {
-            FavoritesScreen()
+            FavoritesScreen(navHostController = navHostController)
         }
         composable(route = NavItem.Search.route) {
-            SearchScreen()
+            SearchScreen(navHostController = navHostController)
         }
     }
 }

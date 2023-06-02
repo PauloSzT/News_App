@@ -1,5 +1,7 @@
 package com.example.newsapplication.data.remote.models
 
+import com.example.newsapplication.core.CoreConstants.UNDEFINED
+import com.example.newsapplication.core.CoreConstants.UNKNOWN
 import com.example.newsapplication.ui.models.UiNews
 import com.example.newsapplication.ui.utils.ToUiMapper
 import kotlinx.serialization.SerialName
@@ -39,15 +41,14 @@ data class News(
     val pillarId: String?,
     val pillarName: String?
 ) : ToUiMapper<UiNews> {
-    override fun mapToUiNews(ids: List<String>): UiNews {
+    override fun mapToUiModel(): UiNews {
         return UiNews(
-            id = id ?: "Undefined",
-            type = type ?: "Unknown",
-            sectionName = sectionName ?: "Unknown",
-            webPublicationDate = webPublicationDate ?: "Undefined",
-            webTitle = webTitle ?: "Unknown",
-            webUrl = webUrl ?: "Unknown",
-            isFavorite = ids.contains(id)
+            id = id ?: UNDEFINED,
+            type = type ?: UNKNOWN,
+            sectionName = sectionName ?: UNKNOWN,
+            webPublicationDate = webPublicationDate ?: UNDEFINED,
+            webTitle = webTitle ?: UNKNOWN,
+            webUrl = webUrl ?: UNKNOWN
         )
     }
 }

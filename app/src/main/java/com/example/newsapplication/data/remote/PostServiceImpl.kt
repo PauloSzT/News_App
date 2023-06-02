@@ -1,7 +1,16 @@
 package com.example.newsapplication.data.remote
 
-import com.example.newsapplication.data.remote.RemoteConstants.BASE_URL
+import com.example.newsapplication.data.remote.RemoteConstants.API_KEY_PARAMETER_NAME
+import com.example.newsapplication.data.remote.RemoteConstants.BASE_URL_ENDPOINT
 import com.example.newsapplication.data.remote.RemoteConstants.KEY
+import com.example.newsapplication.data.remote.RemoteConstants.NEW_VALUE_SPACE
+import com.example.newsapplication.data.remote.RemoteConstants.PAGE_PARAMETER_NAME
+import com.example.newsapplication.data.remote.RemoteConstants.PAGE_SIZE_PARAMETER_NAME
+import com.example.newsapplication.data.remote.RemoteConstants.PAGE_SIZE_VALUE
+import com.example.newsapplication.data.remote.RemoteConstants.QUERY_PARAMETER_NAME
+import com.example.newsapplication.data.remote.RemoteConstants.SECTION_FILTER_NAME
+import com.example.newsapplication.data.remote.RemoteConstants.SPACELINE
+import com.example.newsapplication.data.remote.RemoteConstants.TYPE_FILTER_NAME
 import com.example.newsapplication.data.remote.models.SearchResult
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -41,14 +50,14 @@ class PostServiceImpl() : PostService {
         typeFilter: String
     ): SearchResult {
 
-        val response: SearchResult = client.get(BASE_URL) {
+        val response: SearchResult = client.get(BASE_URL_ENDPOINT) {
             url {
-                parameters.append("q", query.replace(" ", "%20"))
-                parameters.append("api-key", KEY)
-                parameters.append("page", page.toString())
-                parameters.append("page-size", "20")
-                if (sectionFilter.isNotEmpty()) parameters.append("section", sectionFilter)
-                if (typeFilter.isNotEmpty()) parameters.append("type", typeFilter)
+                parameters.append(QUERY_PARAMETER_NAME, query.replace(SPACELINE, NEW_VALUE_SPACE))
+                parameters.append(API_KEY_PARAMETER_NAME, KEY)
+                parameters.append(PAGE_PARAMETER_NAME, page.toString())
+                parameters.append(PAGE_SIZE_PARAMETER_NAME, PAGE_SIZE_VALUE)
+                if (sectionFilter.isNotEmpty()) parameters.append(SECTION_FILTER_NAME, sectionFilter)
+                if (typeFilter.isNotEmpty()) parameters.append(TYPE_FILTER_NAME, typeFilter)
             }
         }.body()
         return response

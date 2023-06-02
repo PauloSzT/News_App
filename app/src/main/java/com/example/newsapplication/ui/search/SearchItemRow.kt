@@ -13,17 +13,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.newsapplication.R
 import com.example.newsapplication.ui.models.UiNews
 
 @Composable
 fun SearchItemRow(
-    uiNews: UiNews
+    uiNews: UiNews,
+    favoritesIdsState: List<String>,
+    onFavoriteClick: (UiNews) -> Unit,
+    navigateToDetails: (String) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { },
+            .clickable { navigateToDetails(uiNews.id)},
         elevation = CardDefaults.cardElevation(8.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer)
     ) {
@@ -41,19 +46,19 @@ fun SearchItemRow(
                     softWrap = true
                 )
                 Text(
-                    text = "Publication Date : ${uiNews.webPublicationDate}"
+                    text = stringResource(id = R.string.publication_date,uiNews.webPublicationDate)
                 )
-//                Icon(
-//                    modifier = Modifier
-//                        .padding(top = 16.dp, end = 8.dp)
-//                        .weight(0.5f)
-//                        .clickable { },
-//                    painter = painterResource(
-//                        if (uiNews.isFavorite) R.drawable.ic_start_fill else R.drawable.ic_start_empty
-//                    ),
-//                    contentDescription = null
-//                )
             }
+            Icon(
+                modifier = Modifier
+                    .padding(top = 16.dp, end = 8.dp)
+                    .weight(0.5f)
+                    .clickable { onFavoriteClick(uiNews) },
+                painter = painterResource(
+                    if (favoritesIdsState.contains(uiNews.id)) R.drawable.ic_start_fill else R.drawable.ic_start_empty
+                ),
+                contentDescription = null
+            )
         }
     }
 }

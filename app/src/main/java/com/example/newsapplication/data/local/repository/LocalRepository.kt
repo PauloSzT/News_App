@@ -1,14 +1,12 @@
 package com.example.newsapplication.data.local.repository
 
-import androidx.datastore.preferences.core.edit
-import com.example.newsapplication.data.local.datastore.FiltersDataStore
 import com.example.newsapplication.data.local.models.FavoriteItem
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 interface LocalRepository {
     fun getAllFavorites(): Flow<List<FavoriteItem>>
     fun getAllIds(): Flow<List<String>>
+    fun getItemById(id: String): Flow<FavoriteItem>
     suspend fun deleteAllItems()
     suspend fun insertItem(item: FavoriteItem)
     suspend fun deleteItem(item: FavoriteItem)

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -32,17 +34,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
+import com.example.movieapp.ui.theme.NewsAppTheme
 import com.example.newsapplication.R
 import com.example.newsapplication.ui.components.FiltersDrawer
+import com.example.newsapplication.ui.favorites.FavoriteConstants
+import com.example.newsapplication.ui.navigation.NavItem
+import com.example.newsapplication.ui.search.SearchScreenConstants.OPEN_FILTERS
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import java.net.URLEncoder
 
 @Composable
 fun SearchScreen(
-    viewModel: SearchViewModel = koinViewModel()
+    viewModel: SearchScreenViewModel = koinViewModel(),
+    navHostController: NavHostController
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -61,20 +71,25 @@ fun SearchScreen(
         },
         gesturesEnabled = true
     ) {
-        SearchScreenContent(viewModel.searchUiState) { scope.launch { drawerState.open()} }
+        SearchScreenContent(
+            searchUiState = viewModel.searchUiState,
+            openFilterDrawer = { scope.launch { drawerState.open() } }) { item ->
+            navHostController.navigate(NavItem.Detail.routeWithArgs(item))
+        }
     }
 }
 
 @Composable
 fun SearchScreenContent(
     searchUiState: SearchUiState,
-    openFilterDrawer: () -> Unit
+    openFilterDrawer: () -> Unit,
+    navigateToDetails: (String) -> Unit
 ) {
-    val searchResultList by searchUiState.searchResultList.collectAsState()
     val isLoading by searchUiState.isLoading.collectAsState()
     val searchValue by searchUiState.searchValue.collectAsState()
     val newsPaginatedItemsProvider by searchUiState.newsPaginatedItemsProvider.collectAsState()
     val newsPaginatedItems = newsPaginatedItemsProvider?.collectAsLazyPagingItems()
+    val favoritesIdsState by searchUiState.favoritesIdsState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -85,20 +100,18 @@ fun SearchScreenContent(
             modifier = Modifier
                 .height(48.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                onClick = {
-                    openFilterDrawer()
-                },
+                onClick = { openFilterDrawer() },
                 colors = ButtonDefaults.buttonColors(
                     containerColor =
-                    MaterialTheme.colorScheme.primary
+                    MaterialTheme.colorScheme.onBackground
                 ),
-                elevation = ButtonDefaults.buttonElevation(1.dp)
+                elevation = ButtonDefaults.buttonElevation(1.dp),
+                shape = ShapeDefaults.Small
             ) {
-                Text(text = "Open Filters")
+                Text(text = OPEN_FILTERS)
             }
         }
         Row {
@@ -136,7 +149,21 @@ fun SearchScreenContent(
                             contentType = newsPaginatedItems.itemContentType()
                         ) { index ->
                             val item = newsPaginatedItems[index]
-                            item?.let { SearchItemRow(uiNews = it) } ?: NoResult()
+                            item?.let { uiNews ->
+                                SearchItemRow(
+                                    uiNews = uiNews,
+                                    favoritesIdsState,
+                                    searchUiState.onFavoriteClick,
+                                    navigateToDetails = {
+                                        val id = URLEncoder.encode(
+                                            uiNews.id,
+                                            FavoriteConstants.UTF
+                                        )
+                                        navigateToDetails(id)
+                                    }
+                                )
+                            } ?: NoResult()
+                            Spacer(modifier = Modifier.height(2.dp))
                         }
                     } ?: item { NoResult() }
                 }
@@ -172,8 +199,26 @@ fun NoResult() {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun SearchScreenContentPreview() {
+    val searchUiState = SearchUiState(
 
+        isLoading = MutableStateFlow(false),
+        searchValue = MutableStateFlow(""),
+        sectionFilterList = MutableStateFlow(emptyList()),
+        typeFilterList = MutableStateFlow(emptyList()),
+        typeFilterState = MutableStateFlow(""),
+        sectionFilterState = MutableStateFlow(""),
+        favoritesIdsState = MutableStateFlow(emptyList()),
+        onSectionFilterClick = { },
+        onTypeFilterClick = { },
+        newsPaginatedItemsProvider = MutableStateFlow(null),
+        onQueryChange = {},
+        onFavoriteClick = {}
+    )
+    NewsAppTheme {
+        SearchScreenContent(searchUiState = searchUiState, {}, {})
+    }
 }
+

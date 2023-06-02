@@ -6,21 +6,23 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.newsapplication.core.CoreConstants.EMPTY_STRING
+import com.example.newsapplication.data.local.LocalConstants.FILTER_SETTINGS
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class FiltersDataStore(private val context: Context) {
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
-        name = "filter_settings"
+        name = FILTER_SETTINGS
     )
 
     val sectionFilterFlow: Flow<String> = context.dataStore.data.map { preferences ->
-        preferences[SECTION_FILTER] ?: ""
+        preferences[SECTION_FILTER] ?: EMPTY_STRING
     }
 
     val typeFilterFlow: Flow<String> = context.dataStore.data.map { preferences ->
-        preferences[TYPE_FILTER] ?: ""
+        preferences[TYPE_FILTER] ?: EMPTY_STRING
     }
 
     suspend fun setSectionFilter(filter: String) = context.dataStore.edit { mutablePreferences ->

@@ -10,9 +10,9 @@ class AppDataBaseImpl(context: Context) {
         return favoriteDAO.getAllFavorites()
     }
 
-    fun getAllIds(): Flow<List<String>> {
-        return favoriteDAO.getAllIds()
-    }
+    fun getAllIds(): Flow<List<String>> = favoriteDAO.getAllIds()
+
+    fun getItemById(id: String): Flow<FavoriteItem> = favoriteDAO.getItemById(id)
 
     suspend fun deleteAllItems() {
         return favoriteDAO.deleteAllItems()

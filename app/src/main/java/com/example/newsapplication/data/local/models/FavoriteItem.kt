@@ -3,8 +3,10 @@ package com.example.newsapplication.data.local.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.newsapplication.ui.models.UiDetailNews
-import com.example.newsapplication.ui.utils.ToUiModelIntegrationMapper
+import com.example.newsapplication.core.CoreConstants.UNDEFINED
+import com.example.newsapplication.core.CoreConstants.UNKNOWN
+import com.example.newsapplication.ui.models.UiNews
+import com.example.newsapplication.ui.utils.ToUiMapper
 
 @Entity(tableName = "favorite")
 data class FavoriteItem(
@@ -27,14 +29,15 @@ data class FavoriteItem(
     @ColumnInfo(name = "sectionName")
     val sectionName: String?
 
-): ToUiModelIntegrationMapper<UiDetailNews>{
-    override fun mapToUiModelIntegration(): UiDetailNews {
-        return UiDetailNews(
-            type = type ?: "Unknown",
-            sectionName = sectionName ?: "Unknown",
-            webPublicationDate = date ?: "Undefined",
-            webTitle = title ?: "Unknown",
-            webUrl = webUrl ?: "Unknown"
+): ToUiMapper<UiNews>{
+    override fun mapToUiModel(): UiNews {
+        return UiNews(
+            id = itemId,
+            type = type ?: UNKNOWN,
+            sectionName = sectionName ?: UNKNOWN,
+            webPublicationDate = date ?: UNDEFINED,
+            webTitle = title ?: UNKNOWN,
+            webUrl = webUrl ?: UNKNOWN,
         )
     }
 }

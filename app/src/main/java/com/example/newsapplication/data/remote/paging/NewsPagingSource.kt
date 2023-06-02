@@ -10,7 +10,6 @@ import java.io.IOException
 class NewsPagingSource(
     private val postService: PostService,
     private val query: String,
-    private val idsList: List<String>,
     private val sectionFilter: String,
     private val typeFilter: String
 ) : PagingSource<Int, UiNews>() {
@@ -27,7 +26,7 @@ class NewsPagingSource(
             val pageNumber = params.key ?: 1
             val response =
                 postService.getSearchByQuery(query, pageNumber, sectionFilter, typeFilter)
-            val responseData = response.response.results?.map { it.mapToUiNews(idsList) }
+            val responseData = response.response.results?.map { it.mapToUiModel() }
                 ?: emptyList()
             LoadResult.Page(
                 data = responseData,
