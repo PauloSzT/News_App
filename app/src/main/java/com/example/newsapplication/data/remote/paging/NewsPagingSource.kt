@@ -10,7 +10,9 @@ import java.io.IOException
 class NewsPagingSource(
     private val postService: PostService,
     private val query: String,
-    private val idsList: List<String>
+    private val idsList: List<String>,
+    private val sectionFilter: String,
+    private val typeFilter: String
 ) : PagingSource<Int, UiNews>() {
 
     override fun getRefreshKey(state: PagingState<Int, UiNews>): Int? {
@@ -23,10 +25,15 @@ class NewsPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UiNews> {
         return try {
             val pageNumber = params.key ?: 1
-            val response = postService.getSearchByQuery(query, pageNumber)
+            val response =
+                postService.getSearchByQuery(query, pageNumber, sectionFilter, typeFilter)
             val responseData = response.response.results?.map { it.mapToUiNews(idsList) }
                 ?: emptyList()
-            LoadResult.Page(data = responseData, null, nextKey = pageNumber + 2)
+            LoadResult.Page(
+                data = responseData,
+                null,
+                nextKey = if (responseData.isNotEmpty()) pageNumber + 1 else null
+            )
         } catch (e: IOException) {
             LoadResult.Error(e)
         } catch (e: HttpException) {

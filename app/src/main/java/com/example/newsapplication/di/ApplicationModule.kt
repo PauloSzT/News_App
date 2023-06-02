@@ -1,6 +1,7 @@
 package com.example.newsapplication.di
 
 import com.example.newsapplication.data.local.AppDataBaseImpl
+import com.example.newsapplication.data.local.datastore.FiltersDataStore
 import com.example.newsapplication.data.local.repository.LocalRepository
 import com.example.newsapplication.data.local.repository.LocalRepositoryImpl
 import com.example.newsapplication.data.remote.PostService
@@ -20,6 +21,7 @@ val applicationModule = module {
     /** Services */
     singleOf(::PostServiceImpl) { bind<PostService>() }
     single { AppDataBaseImpl(get()) }
+    single { FiltersDataStore(get()) }
     /** ViewModels */
     viewModelOf(::SearchViewModel)
 }

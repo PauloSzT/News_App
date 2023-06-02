@@ -5,24 +5,27 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.paging.compose.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -30,19 +33,42 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.example.newsapplication.R
+import com.example.newsapplication.ui.components.FiltersDrawer
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = koinViewModel()
 ) {
-    SearchScreenContent(viewModel.searchUiState)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet {
+                FiltersDrawer(
+                    searchUiState = viewModel.searchUiState,
+                    closeDrawer = {
+                        scope.launch { drawerState.close() }
+                    }
+                )
+            }
+        },
+        gesturesEnabled = true
+    ) {
+        SearchScreenContent(viewModel.searchUiState) { scope.launch { drawerState.open()} }
+    }
 }
 
 @Composable
 fun SearchScreenContent(
-    searchUiState: SearchUiState
+    searchUiState: SearchUiState,
+    openFilterDrawer: () -> Unit
 ) {
     val searchResultList by searchUiState.searchResultList.collectAsState()
     val isLoading by searchUiState.isLoading.collectAsState()
@@ -59,41 +85,20 @@ fun SearchScreenContent(
             modifier = Modifier
                 .height(48.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = stringResource(id = R.string.filters))
             Button(
                 onClick = {
-//                    searchUiState.onFilterClick(FilterType.Movies)
+                    openFilterDrawer()
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor =
-//                    if (filterTypeList.contains(FilterType.Movies)) {
                     MaterialTheme.colorScheme.primary
-//                    } else {
-//                        MaterialTheme.colorScheme.secondary
-//                    }
                 ),
                 elevation = ButtonDefaults.buttonElevation(1.dp)
             ) {
-                Text(text = "")
-            }
-            Button(
-                onClick = {
-//                    searchUiState.onFilterClick(FilterType.Series)
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor =
-//                    if (filterTypeList.contains(FilterType.Series)) {
-                    MaterialTheme.colorScheme.primary
-//                    } else {
-//                        MaterialTheme.colorScheme.secondary
-//                    }
-                ),
-                elevation = ButtonDefaults.buttonElevation(1.dp)
-            ) {
-                Text(text = "")
+                Text(text = "Open Filters")
             }
         }
         Row {
@@ -125,25 +130,15 @@ fun SearchScreenContent(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     newsPaginatedItems?.let {
-                        items(newsPaginatedItems) {
-                            it?.let { SearchItemRow(uiNews = it) }
-
+                        items(
+                            count = newsPaginatedItems.itemCount,
+                            key = newsPaginatedItems.itemKey(),
+                            contentType = newsPaginatedItems.itemContentType()
+                        ) { index ->
+                            val item = newsPaginatedItems[index]
+                            item?.let { SearchItemRow(uiNews = it) } ?: NoResult()
                         }
-                    }
-//                    if (searchResultList.isEmpty()) {
-//                        item { NoResult() }
-//                    } else {
-//                        searchResultList.forEach { searchResult ->
-//                            item {
-//                                SearchItemRow(
-//                                    searchResult
-//                                )
-//                            }
-//                            item {
-//                                Spacer(modifier = Modifier.height(8.dp))
-//                            }
-//                        }
-//                    }
+                    } ?: item { NoResult() }
                 }
             }
         }

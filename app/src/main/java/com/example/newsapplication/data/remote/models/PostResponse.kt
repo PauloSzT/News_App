@@ -1,4 +1,4 @@
-package com.example.newsapplication.data.remote.dto
+package com.example.newsapplication.data.remote.models
 
 import com.example.newsapplication.ui.models.UiNews
 import com.example.newsapplication.ui.utils.ToUiMapper

@@ -1,6 +1,6 @@
 package com.example.newsapplication.ui.models
 
-import com.example.newsapplication.data.local.dto.FavoriteItem
+import com.example.newsapplication.data.local.models.FavoriteItem
 import com.example.newsapplication.ui.utils.ToDataBaseMapper
 import com.example.newsapplication.ui.utils.ToUiModelIntegrationMapper
 

@@ -1,7 +1,7 @@
 package com.example.newsapplication.data.local
 
 import android.content.Context
-import com.example.newsapplication.data.local.dto.FavoriteItem
+import com.example.newsapplication.data.local.models.FavoriteItem
 import kotlinx.coroutines.flow.Flow
 
 class AppDataBaseImpl(context: Context) {

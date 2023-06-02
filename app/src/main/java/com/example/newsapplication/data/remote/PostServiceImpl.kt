@@ -2,7 +2,7 @@ package com.example.newsapplication.data.remote
 
 import com.example.newsapplication.data.remote.RemoteConstants.BASE_URL
 import com.example.newsapplication.data.remote.RemoteConstants.KEY
-import com.example.newsapplication.data.remote.dto.SearchResult
+import com.example.newsapplication.data.remote.models.SearchResult
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -19,7 +19,7 @@ import kotlinx.serialization.json.Json
 class PostServiceImpl() : PostService {
     @OptIn(ExperimentalSerializationApi::class)
     private val client = HttpClient(CIO) {
-        install(Logging){
+        install(Logging) {
             logger = Logger.DEFAULT
             level = LogLevel.ALL
         }
@@ -34,14 +34,21 @@ class PostServiceImpl() : PostService {
         }
     }
 
-    override suspend fun getSearchByQuery(query: String, page: Int): SearchResult {
+    override suspend fun getSearchByQuery(
+        query: String,
+        page: Int,
+        sectionFilter: String,
+        typeFilter: String
+    ): SearchResult {
 
         val response: SearchResult = client.get(BASE_URL) {
             url {
-                parameters.append("q", query.replace(" ","%20"))
+                parameters.append("q", query.replace(" ", "%20"))
                 parameters.append("api-key", KEY)
                 parameters.append("page", page.toString())
                 parameters.append("page-size", "20")
+                if (sectionFilter.isNotEmpty()) parameters.append("section", sectionFilter)
+                if (typeFilter.isNotEmpty()) parameters.append("type", typeFilter)
             }
         }.body()
         return response

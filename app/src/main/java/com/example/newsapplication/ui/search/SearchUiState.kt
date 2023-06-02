@@ -9,6 +9,13 @@ data class SearchUiState(
     val searchResultList: StateFlow<MutableList<UiNews>>,
     val isLoading: StateFlow<Boolean>,
     val searchValue: StateFlow<String>,
-    val onQueryChange: (String) -> Unit,
-    val newsPaginatedItemsProvider: StateFlow<Flow<PagingData<UiNews>>?>
+    val sectionFilterList: StateFlow<List<String>>,
+    val typeFilterList: StateFlow<List<String>>,
+    val typeFilterState: StateFlow<String>,
+    val sectionFilterState: StateFlow<String>,
+    val onSectionFilterClick: (String) -> Unit,
+    val onTypeFilterClick: (String) -> Unit,
+    val newsPaginatedItemsProvider: StateFlow<Flow<PagingData<UiNews>>?>,
+    val onQueryChange: (String) -> Unit
+
 )

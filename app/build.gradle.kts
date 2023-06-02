@@ -121,4 +121,7 @@ dependencies {
 
     //Paging3
     implementation("androidx.paging:paging-runtime-ktx:3.2.0-alpha06")
+
+    //DataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }

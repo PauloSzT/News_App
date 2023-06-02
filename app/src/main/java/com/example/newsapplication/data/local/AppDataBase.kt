@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.newsapplication.data.local.dto.FavoriteItem
+import com.example.newsapplication.data.local.models.FavoriteItem
 
 @Database(entities = [FavoriteItem::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
