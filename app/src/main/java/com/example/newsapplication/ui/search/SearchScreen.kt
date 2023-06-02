@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.paging.compose.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.newsapplication.R
 import org.koin.androidx.compose.koinViewModel
 
@@ -45,6 +47,8 @@ fun SearchScreenContent(
     val searchResultList by searchUiState.searchResultList.collectAsState()
     val isLoading by searchUiState.isLoading.collectAsState()
     val searchValue by searchUiState.searchValue.collectAsState()
+    val newsPaginatedItemsProvider by searchUiState.newsPaginatedItemsProvider.collectAsState()
+    val newsPaginatedItems = newsPaginatedItemsProvider?.collectAsLazyPagingItems()
 
     Column(
         modifier = Modifier
@@ -120,20 +124,26 @@ fun SearchScreenContent(
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    if (searchResultList.isEmpty()) {
-                        item { NoResult() }
-                    } else {
-                        searchResultList.forEach { searchResult ->
-                            item {
-                                SearchItemRow(
-                                    searchResult
-                                )
-                            }
-                            item {
-                                Spacer(modifier = Modifier.height(8.dp))
-                            }
+                    newsPaginatedItems?.let {
+                        items(newsPaginatedItems) {
+                            it?.let { SearchItemRow(uiNews = it) }
+
                         }
                     }
+//                    if (searchResultList.isEmpty()) {
+//                        item { NoResult() }
+//                    } else {
+//                        searchResultList.forEach { searchResult ->
+//                            item {
+//                                SearchItemRow(
+//                                    searchResult
+//                                )
+//                            }
+//                            item {
+//                                Spacer(modifier = Modifier.height(8.dp))
+//                            }
+//                        }
+//                    }
                 }
             }
         }

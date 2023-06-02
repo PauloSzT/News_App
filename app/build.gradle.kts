@@ -70,30 +70,31 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3:1.2.0-alpha01")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    implementation ("androidx.navigation:navigation-compose:2.5.3")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
     implementation("io.coil-kt:coil-compose:2.3.0")
+    implementation("androidx.paging:paging-compose:1.0.0-alpha20")
 
     // Interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 
     // Accompanist
-    implementation ("com.google.accompanist:accompanist-permissions:0.23.1")
+    implementation("com.google.accompanist:accompanist-permissions:0.23.1")
 
     // Kotlin serialization
-    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
     //Koin
     implementation("io.insert-koin:koin-core:3.4.1")
-    implementation ("io.insert-koin:koin-android:3.4.1")
-    implementation ("io.insert-koin:koin-android-compat:3.4.1")
-    implementation ("io.insert-koin:koin-androidx-workmanager:3.4.1")
-    implementation ("io.insert-koin:koin-androidx-navigation:3.4.1")
-    implementation ("io.insert-koin:koin-androidx-compose:3.4.5")
+    implementation("io.insert-koin:koin-android:3.4.1")
+    implementation("io.insert-koin:koin-android-compat:3.4.1")
+    implementation("io.insert-koin:koin-androidx-workmanager:3.4.1")
+    implementation("io.insert-koin:koin-androidx-navigation:3.4.1")
+    implementation("io.insert-koin:koin-androidx-compose:3.4.5")
 
     // Koin for Ktor
-    implementation ("io.insert-koin:koin-ktor:3.4.1")
+    implementation("io.insert-koin:koin-ktor:3.4.1")
     // SLF4J Logger
-    implementation ("io.insert-koin:koin-logger-slf4j:3.4.1")
+    implementation("io.insert-koin:koin-logger-slf4j:3.4.1")
 
     // Ktor
     implementation("io.ktor:ktor-client-core:2.3.0")
@@ -102,19 +103,22 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:2.3.0")
     implementation("io.ktor:ktor-client-serialization:2.3.0")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
-    implementation ("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
 
     implementation("ch.qos.logback:logback-classic:1.2.3")
 
     //DataStore
-    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     // optional - RxJava2 support
-    implementation ("androidx.datastore:datastore-preferences-rxjava2:1.0.0")
+    implementation("androidx.datastore:datastore-preferences-rxjava2:1.0.0")
     // optional - RxJava3 support
-    implementation ("androidx.datastore:datastore-preferences-rxjava3:1.0.0")
+    implementation("androidx.datastore:datastore-preferences-rxjava3:1.0.0")
 
     // Room
-    implementation ("androidx.room:room-runtime:2.5.1")
-    implementation ("androidx.room:room-ktx:2.5.1")
-    ksp ("androidx.room:room-compiler:2.5.1")
+    implementation("androidx.room:room-runtime:2.5.1")
+    implementation("androidx.room:room-ktx:2.5.1")
+    ksp("androidx.room:room-compiler:2.5.1")
+
+    //Paging3
+    implementation("androidx.paging:paging-runtime-ktx:3.2.0-alpha06")
 }
